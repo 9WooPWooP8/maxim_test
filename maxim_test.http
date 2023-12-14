@@ -1,0 +1,6 @@
+@maxim_test_HostAddress = http://localhost:5264
+
+GET {{maxim_test_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
