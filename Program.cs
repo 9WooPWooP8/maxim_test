@@ -5,7 +5,7 @@ class Program
     static void Main(string[] args)
     {
         var input = Console.ReadLine();
-        if (input == null) return;
+        if (input == null || input == "") return;
 
         var validationResult = ValidateInput(input);
 
