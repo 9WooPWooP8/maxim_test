@@ -51,6 +51,7 @@ class Program
 
         var binarySearchTree = new BinarySearchTree(result);
         var BSTSortResult = binarySearchTree.Traverse();
+
         BSTSortResult.Reverse();
 
         Console.WriteLine("sorted result (Tree sort): {0}", string.Join("", BSTSortResult));
@@ -268,5 +269,4 @@ public class BinarySearchTree
         TraverseTree(traversalList, node.right);
         return;
     }
-
 }
