@@ -8,7 +8,6 @@ var randomApi = builder.Configuration.GetValue<string>("RandomApi");
 var blacklist = builder.Configuration
                        .GetSection("Settings:BlackList")
                        .Get<List<string>>();
-
 var taskConfig = new TaskConfiguration()
 {
     ApiUrl = randomApi!,
