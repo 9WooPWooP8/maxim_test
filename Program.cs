@@ -29,14 +29,15 @@ class Program
             result = ReverseString(input) + input;
         }
 
-		var charsCount = CountSymbols(result);
+        var charsCount = CountSymbols(result);
 
         foreach (KeyValuePair<char, int> charCount in charsCount)
         {
-			Console.WriteLine("{0}: {1}", charCount.Key, charCount.Value);
+            Console.WriteLine("{0}: {1}", charCount.Key, charCount.Value);
         }
 
-        Console.WriteLine(result);
+        Console.WriteLine("main result: {0}", result);
+		Console.WriteLine("longest substring: {0}", FindLongestSubstring(result));
     }
 
     static string ReverseString(string input)
@@ -67,6 +68,37 @@ class Program
                              .ToDictionary(g => g.Key, g => g.Count());
 
         return charCount;
+    }
+
+    static string FindLongestSubstring(string input)
+    {
+		string substringSymbols = "aeiouy";
+
+		int startIndex = -1;
+		int endIndex = -1;
+
+		int i = -1;
+		foreach (var character in input)
+		{
+			i++;
+			if (!substringSymbols.Contains(character))
+				continue;
+
+			if (startIndex == - 1 ){
+				startIndex = i;
+				continue;
+			}
+
+			endIndex = i;
+		}
+
+		if (startIndex == -1)
+			return "";
+
+		if (endIndex == -1)
+			return input[startIndex].ToString();
+
+		return input.Substring(startIndex, endIndex - startIndex + 1);
     }
 
 
