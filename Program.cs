@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿namespace maxim_test;
 
 class Program
@@ -6,22 +7,32 @@ class Program
     {
         var input = Console.ReadLine();
         if (input == null || input == "") return;
+=======
+var builder = WebApplication.CreateBuilder(args);
 
-        var validationResult = ValidateInput(input);
+builder.Services.AddControllers();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<TaskService>();
 
-        if (validationResult.Count > 0)
-        {
-            Console.WriteLine("invalid symbols found in input: {0}", String.Join("", validationResult));
-            return;
-        }
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-        string? result = null;
+var app = builder.Build();
+>>>>>>> Stashed changes
 
-        if (input.Length % 2 == 0)
-        {
-            var firstHalf = input.Substring(0, input.Length / 2);
-            var secondHalf = input.Substring(input.Length / 2, input.Length / 2);
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
 
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{id?}");
+
+<<<<<<< Updated upstream
             result = ReverseString(firstHalf) + ReverseString(secondHalf);
         }
         else
@@ -232,3 +243,6 @@ public class BinarySearchTree
         return;
     }
 }
+=======
+await app.RunAsync();
+>>>>>>> Stashed changes
