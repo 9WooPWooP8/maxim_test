@@ -15,6 +15,9 @@ public class StringFormatController : ControllerBase
     public async Task<IActionResult> FormatString([FromRoute] string input)
     {
 		TaskResultDTO result = null;
+
+		Thread.Sleep(10000);
+		
         try
         {
             result = await _taskService.FormatStringTask(input);
