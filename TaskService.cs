@@ -3,11 +3,12 @@
 public class TaskService
 {
     private readonly IHttpClientFactory _httpClientFactory = null!;
+    private readonly TaskConfiguration _taskConfiguration = null!;
 
-    public TaskService(IHttpClientFactory httpClientFactory)
+    public TaskService(IHttpClientFactory httpClientFactory, TaskConfiguration taskConfiguration)
     {
         _httpClientFactory = httpClientFactory;
-
+        _taskConfiguration = taskConfiguration;
     }
 
     public async Task<TaskResultDTO> FormatStringTask(string input)
@@ -15,7 +16,7 @@ public class TaskService
         var taskResult = new TaskResultDTO();
 
         if (input == null || input == "")
-			throw new Exception("empty string received");
+            throw new Exception("empty string received");
 
         var validationResult = ValidateInput(input);
 
@@ -23,6 +24,10 @@ public class TaskService
         {
             throw new Exception($"invalid symbols found: {String.Join(",", validationResult.Distinct())}");
         }
+
+		if (!ValidateInputBlacklist(input)){
+			throw new Exception("word is in blacklist!");
+		}
 
         string result = FormatString(input);
 
@@ -75,7 +80,7 @@ public class TaskService
     {
         using HttpClient httpClient = this._httpClientFactory.CreateClient();
 
-        string url = $"http://www.randomnumberapi.com/api/v1.0/random?min={lowerBound}&max={higherBound}";
+        string url = $"{_taskConfiguration.ApiUrl}/api/v1.0/random?min={lowerBound}&max={higherBound}";
 
         var response = await httpClient.GetAsync(url);
 
@@ -103,6 +108,11 @@ public class TaskService
         }
 
         return invalidSymbols;
+    }
+
+    bool ValidateInputBlacklist(string input)
+    {
+        return !_taskConfiguration.BlackList.Contains(input);
     }
 
     Dictionary<char, int> CountSymbols(string input)
