@@ -1,3 +1,4 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -13,8 +14,18 @@ var taskConfig = new TaskConfiguration()
     BlackList = blacklist!
 };
 
+var maxParallelRequests = builder.Configuration
+                       .GetSection("Settings:ParallelLimit")
+                       .Get<int>();
+
+var parallelConfig = new ParallelConfiguration()
+{
+	MaxParallelRequests = maxParallelRequests
+};
+
 
 builder.Services.AddSingleton<TaskConfiguration>(taskConfig);
+builder.Services.AddSingleton<ParallelConfiguration>(parallelConfig);
 builder.Services.AddScoped<TaskService>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -35,5 +46,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}"
 );
+app.UseParallelCountMiddleware();
 
 await app.RunAsync();
