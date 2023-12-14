@@ -12,7 +12,7 @@ class Program
         if (validationResult.Count > 0)
         {
             Console.WriteLine("invalid symbols found in input: {0}", String.Join("", validationResult));
-			return;
+            return;
         }
 
         string? result = null;
@@ -27,6 +27,13 @@ class Program
         else
         {
             result = ReverseString(input) + input;
+        }
+
+		var charsCount = CountSymbols(result);
+
+        foreach (KeyValuePair<char, int> charCount in charsCount)
+        {
+			Console.WriteLine("{0}: {1}", charCount.Key, charCount.Value);
         }
 
         Console.WriteLine(result);
@@ -52,5 +59,16 @@ class Program
 
         return invalidSymbols;
     }
+
+    static Dictionary<char, int> CountSymbols(string input)
+    {
+        var charCount = input.GroupBy(c => c)
+                             .OrderBy(c => c.Key)
+                             .ToDictionary(g => g.Key, g => g.Count());
+
+        return charCount;
+    }
+
+
 }
 
