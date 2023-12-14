@@ -1,8 +1,15 @@
-﻿namespace maxim_test;
+﻿using System.Text.Json;
+
+namespace maxim_test;
 
 class Program
 {
     static void Main(string[] args)
+    {
+        MainAsync().Wait();
+    }
+
+    static async Task MainAsync()
     {
         var input = Console.ReadLine();
         if (input == null || input == "") return;
@@ -44,9 +51,39 @@ class Program
 
         var binarySearchTree = new BinarySearchTree(result);
         var BSTSortResult = binarySearchTree.Traverse();
-		BSTSortResult.Reverse();
+
+        BSTSortResult.Reverse();
 
         Console.WriteLine("sorted result (Tree sort): {0}", string.Join("", BSTSortResult));
+
+        var randomIndex = -1;
+        try
+        {
+            randomIndex = await GetRandomFromAPI(0, result.Length - 1);
+        }
+        catch
+        {
+            Console.WriteLine("Error occurred while getting random number from api");
+            Random rnd = new Random();
+            randomIndex = rnd.Next(result.Length);
+        }
+
+        Console.WriteLine("random number: {0}", randomIndex);
+        var shortenedResult = result.Remove(randomIndex, 1);
+        Console.WriteLine("result with removed symbol: {0}", shortenedResult);
+    }
+
+    private static async Task<int> GetRandomFromAPI(int lowerBound, int higherBound)
+    {
+        var httpClient = new HttpClient();
+
+        string url = $"http://www.randomnumberapi.com/api/v1.0/random?min={lowerBound}&max={higherBound}";
+
+        var response = await httpClient.GetAsync(url);
+
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<List<int>>(responseString)[0];
     }
 
     static string ReverseString(string input)
@@ -222,9 +259,10 @@ public class BinarySearchTree
 
     private void TraverseTree(List<char> traversalList, Node? node = null)
     {
-        if (node == null){
+        if (node == null)
+        {
             return;
-		}
+        }
 
         TraverseTree(traversalList, node.left);
         traversalList.Add(node.val);
