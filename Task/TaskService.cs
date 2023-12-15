@@ -30,12 +30,11 @@ public class TaskService
 		}
 
         string result = FormatString(input);
-
         taskResult.FormattedString = result;
 
         var charsCount = CountSymbols(result);
-
         taskResult.SymbolCountResult = charsCount;
+
         taskResult.LongestSubstring = FindLongestSubstring(result);
 
         var resultCharArray = result.ToCharArray();
@@ -189,7 +188,4 @@ public class TaskService
         input[high] = temp;
         return i + 1;
     }
-
-
-
 }
