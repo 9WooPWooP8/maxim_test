@@ -16,8 +16,6 @@ public class StringFormatController : ControllerBase
     {
 		TaskResultDTO result = null;
 
-		Thread.Sleep(10000);
-		
         try
         {
             result = await _taskService.FormatStringTask(input);
@@ -25,8 +23,8 @@ public class StringFormatController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
-
         }
+
         return Ok(result);
     }
 }
